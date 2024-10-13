@@ -25,6 +25,7 @@ body {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgb(153, 149, 149) rgb(78, 74, 74);
+  width: 100%;
 }
 
 .container {
@@ -65,10 +66,12 @@ h1 {
   border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 600px;
+  max-width: 640px;
   margin: 4px auto;
 }
-
+.js-add-html {
+  grid-template-columns: 25px 200px 140px 140px 100px;
+}
 .js-add-button {
   background-color: orangered;
   color: white;
@@ -195,4 +198,13 @@ Animating title
   font-size: 5rem;
   padding: 8px 16px;
   text-shadow: #000000 3px 4px 10px;
+}
+
+.todo-completed.small-container {
+  background-color: aquamarine;
+  text-decoration: line-through;
+}
+
+input[type='checkbox'] {
+  accent-color: green;
 }

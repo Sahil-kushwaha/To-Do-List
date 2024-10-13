@@ -9,14 +9,14 @@ function addTodo() {
   let date = inputDateElement.value;
   const inputTimeElement = document.querySelector('.js-time-input');
   let time = inputTimeElement.value;
-
+  let ischeck = false;
   // Validation checks
   if (!name || !date || !time) {
     alert('Please fill in all fields: task, date, and time.');
     return;
   }
 
-  todoList.push({ name, date, time });
+  todoList.push({ name, date, time, ischeck });
   localStorage.setItem('todoList', JSON.stringify(todoList));
 
   inputNameElement.value = '';
@@ -28,14 +28,13 @@ function addTodo() {
   updateTodoList();
 }
 
-// eslint-disable-next-line no-unused-vars
 function deleteTodo(index) {
   // Remove the specific todo from the list
   todoList.splice(index, 1);
   localStorage.setItem('todoList', JSON.stringify(todoList));
   updateTodoList();
 }
-// eslint-disable-next-line no-unused-vars
+
 function editTodo(index) {
   let inputNameElement = document.querySelector('.js-name-input');
   let inputDateElement = document.querySelector('.js-date-input');
@@ -55,7 +54,14 @@ function editTodo(index) {
     updateTodo(index);
   };
 }
-
+function handleCheckBox(index) {
+  // toggel ischeck flag
+  let checked = todoList[index].ischeck;
+  todoList[index].ischeck = !checked;
+  // update todoList in localStorage
+  localStorage.setItem('todoList', JSON.stringify(todoList));
+  updateTodoList();
+}
 function updateTodoList() {
   // Sort todoList by date and time before rendering
   todoList.sort((a, b) => {
@@ -71,12 +77,13 @@ function updateTodoList() {
     // Dummy usage to avoid ESLint error for deleteTodo and editTodo
     deleteTodo;
     editTodo;
-    todoListhtml += `<div class="small-container">${todoList[i].name}</div>
-                         <div class="small-container">${todoList[i].date} ${todoList[i].time}</div>
-                         <button class="js-delete-button" data-index="${i}">
+    todoListhtml += `  <input type='checkbox' class='checkmark' data-index="${i}" ${todoList[i].ischeck ? 'checked' : ''}>
+                         <div id="${i}" class="small-container  ${todoList[i].ischeck ? 'todo-completed' : ''}"><p>${todoList[i].name}</p></div>
+                         <div  class="small-container"><p>${todoList[i].date} ${todoList[i].time}</p></div>
+                         <button class="js-delete-button" data-index="${i}"}>
                             <i class="fa-solid fa-xmark"></i>
                          </button>
-                         <button class="js-edit-button" data-index="${i}">
+                         <button class="js-edit-button" data-index="${i}" ${todoList[i].ischeck ? 'disabled' : ''}>
                          <i class="fa-regular fa-pen-to-square"></i>
                          </button>`;
   }
@@ -96,6 +103,13 @@ function updateTodoList() {
     button.addEventListener('click', function () {
       const index = button.getAttribute('data-index');
       editTodo(index);
+    });
+  });
+
+  document.querySelectorAll('.checkmark').forEach((checkbox) => {
+    checkbox.addEventListener('click', function () {
+      const index = checkbox.getAttribute('data-index');
+      handleCheckBox(index);
     });
   });
 }
